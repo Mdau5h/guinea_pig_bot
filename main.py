@@ -1,16 +1,41 @@
-# This is a sample Python script.
+import telebot
+from telebot import types
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+token = '2007814381:AAEFmWGNq78ne1H_KuBi9v8Ln8aopslFuGY'
+bot = telebot.TeleBot(token)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@bot.message_handler(commands=['start'])
+def start(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    button = types.KeyboardButton('Посчитай! 📈')
+    markup.add(button)
+    send_msg = f'<b>Привет, {message.from_user.first_name} {message.from_user.last_name}!</b> \nЯ тестовый ' \
+               f'подопытный кролик. Изначально я должен выглядеть как программа-напоминалка, а там кто знает, ' \
+               f'может я чему-то еще научусь. Рад тебя видеть! :)\n' \
+               f'Сейчас я могу считать сложные проценты. Давай попробуем! \n' \
+               f'Чтобы начать, нажми кнопку: "Посчитай"\n'
+    bot.send_message(message.chat.id, send_msg, parse_mode='html', reply_markup=markup)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+@bot.message_handler(content_types=['text'])
+def button_message(message):
+    if message.text == 'Посчитай! 📈':
+        markup = types.ReplyKeyboardRemove(selective=False)
+        bot.send_message(message.chat.id, 'Введи свой депозит, размер ежемесячного взноса, \nгодовую процентную ставку, '
+                                          'и срок вклада (в месяцах). Одной строкой, разделяя значения пробелами.', parse_mode='html', reply_markup=markup)
+        bot.register_next_step_handler(message, input_data)
+
+
+def input_data(message):
+    data = list(map(float, (message.text.split())))
+    bot.send_message(message.chat.id, f'Итоговая сумма за все периоды: {round(calc(data[0], data[1], data[2], data[3]), 2)}', parse_mode='html')
+    bot.send_message(message.chat.id, '/start', parse_mode='html')
+
+
+def calc(deposite, fee, bid, time):
+    for i in range(int(time)):
+        deposite += deposite*(bid/1200)+fee
+    return deposite-fee
+
+bot.polling(none_stop=True)
