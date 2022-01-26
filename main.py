@@ -28,9 +28,13 @@ def button_message(message):
 
 
 def input_data(message):
-    data = list(map(float, (message.text.split())))
-    bot.send_message(message.chat.id, f'Итоговая сумма за все периоды: {round(calc(data[0], data[1], data[2], data[3]), 2)}', parse_mode='html')
-    bot.send_message(message.chat.id, '/start', parse_mode='html')
+    try:
+        data = list(map(float, (message.text.split())))
+        bot.send_message(message.chat.id, f'Итоговая сумма за все периоды: {round(calc(data[0], data[1], data[2], data[3]), 2)}', parse_mode='html')
+        bot.send_message(message.chat.id, '/start', parse_mode='html')
+    except Exception as ex:
+        bot.send_message(message.chat.id, f'Произошла ошибка. Попробуй снова. \nМне не понравилось следующее: {ex}', parse_mode='html')
+        bot.register_next_step_handler(message, input_data)
 
 
 def calc(deposite, fee, bid, time):
