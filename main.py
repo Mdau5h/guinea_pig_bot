@@ -4,7 +4,6 @@ from telebot import types
 token = '2007814381:AAEFmWGNq78ne1H_KuBi9v8Ln8aopslFuGY'
 bot = telebot.TeleBot(token)
 
-
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -30,7 +29,7 @@ def button_message(message):
 def input_data(message):
     try:
         data = list(map(float, (message.text.split())))
-        bot.send_message(message.chat.id, f'Итоговая сумма за все периоды: {round(calc(data[0], data[1], data[2], data[3]), 2)}', parse_mode='html')
+        bot.send_message(message.chat.id, f'Итоговая сумма за все периоды: {calc(data[0], data[1], data[2], data[3])}', parse_mode='html')
         bot.send_message(message.chat.id, '/start', parse_mode='html')
     except Exception as ex:
         bot.send_message(message.chat.id, f'Произошла ошибка. Попробуй снова. \nМне не понравилось следующее: {ex}', parse_mode='html')
@@ -40,6 +39,8 @@ def input_data(message):
 def calc(deposite, fee, bid, time):
     for i in range(int(time)):
         deposite += deposite*(bid/1200)+fee
-    return deposite-fee
+    return f"{deposite-fee:,.0f} ₽".replace(',', ' ')
 
 bot.polling(none_stop=True)
+
+
