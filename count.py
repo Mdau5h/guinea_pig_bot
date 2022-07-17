@@ -19,6 +19,7 @@ def get_data():
         main_debt += fee_oncome
 
     data = {
+        "days": days,
         "main_debt": r(main_debt),
         "every_day_fee": r(main_debt - main_debt_first),
     }
