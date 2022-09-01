@@ -9,7 +9,7 @@ def get_data():
     payday = datetime(2022, 7, 10)
     now_date = datetime.now()
 
-    main_debt = 31200
+    main_debt = 36200
     main_debt_first = main_debt
     fee = 10
     days = (now_date - payday).days
