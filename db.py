@@ -52,18 +52,10 @@ def check_db_exists():
 check_db_exists()
 
 
-# table_name = 'diary'
-# message = {
-#     'created': f'{datetime.now()}',
-#     'message': 'ТЕСТ-ТЕСТ'
-# }
-# insert(table_name, message)
-# rows = fetchall(table_name, ['*'])
-# print(rows)
-#
-#
-# for row in rows:
-#     delete(table_name, row[0])
-#
-#
+table_name = 'diary'
+
+rows = fetchall(table_name, ['*'])
+print(type(rows))
+
+
 # print(fetchall(table_name, ['*']))
