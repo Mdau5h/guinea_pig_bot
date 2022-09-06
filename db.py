@@ -52,10 +52,11 @@ def check_db_exists():
 check_db_exists()
 
 
-table_name = 'diary'
+if __name__ == '__main__':
 
-rows = fetchall(table_name, ['*'])
-print(type(rows))
+    table_name = 'diary'
 
+    rows = fetchall(table_name, ['*'])
+    print(rows)
 
-# print(fetchall(table_name, ['*']))
+    # print(fetchall(table_name, ['*']))

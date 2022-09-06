@@ -49,8 +49,11 @@ async def load_message(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands=['last'])
 async def send_message(message: types.Message):
-    answer = "Извини, данный функционал пока не реализован. Мой создатель работает над этим!"
-    await message.answer(answer, reply_markup=ReplyKeyboardRemove())
+
+    record_date, record_body = manager.last_message()
+    answer = f"Последняя запись от: {record_date}. \n" \
+             f"{record_body}"
+    await message.answer(answer, reply_markup=kb)
     await message.delete()
 
 
