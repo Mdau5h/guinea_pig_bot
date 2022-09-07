@@ -25,6 +25,12 @@ def fetchall(table: str, columns: List[str]):
     return result
 
 
+def fetchlast(table: str, columns: List[str]):
+    columns_joined = ", ".join(columns)
+    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT 1")
+    result = cursor.fetchall()
+    return result
+
 def delete(table: str, row_id: int) -> None:
     row_id = int(row_id)
     cursor.execute(f"DELETE from {table} where id={row_id}")

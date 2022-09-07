@@ -26,10 +26,9 @@ class DBManager:
 
     # todo
     def last_message(self):
-        rows = db.fetchall(self.table_name, ['*'])
-        # хуйня, надо править, тут идет запрос всей базы, кто знает сколько там будет записей
-        message_date = rows[-1][1]
-        message_body = rows[-1][2]
+        row = db.fetchlast(self.table_name, ['*'])
+        message_date = row[0][1]
+        message_body = row[0][2]
         return message_date, message_body
 
 
@@ -39,5 +38,6 @@ class DBManager:
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-# manager = DBManager()
-# print(manager.last_message())
+if __name__ == '__main__':
+    manager = DBManager()
+    print(manager.last_message())
