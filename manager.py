@@ -1,28 +1,43 @@
 from datetime import datetime
+from aiogram.dispatcher.filters.state import State, StatesGroup
 import db
 
 
-table_name = 'diary'
+class FSM(StatesGroup):
+    new_msg = State()
 
 
-def add_expense(raw_message: str):
-    """Добавляет новое сообщение.
-    Принимает на вход текст сообщения, пришедшего в бот."""
-    message = {
-        'created': f'{_get_now_formatted()}',
-        'message': f'{raw_message}'
-    }
-    db.insert(table_name, message)
+class DBManager:
+
+    table_name = 'diary'
+
+    def add_message(self, raw_message: str):
+        """Добавляет новое сообщение.
+        Принимает на вход текст сообщения, пришедшего в бот."""
+        message = {
+            'created': f'{self._get_now_formatted()}',
+            'message': f'{raw_message}'
+        }
+        db.insert(self.table_name, message)
+
+    def delete_message(self, row_id: int) -> None:
+        """Удаляет сообщение по его идентификатору"""
+        db.delete(self.table_name, row_id)
+
+    # todo
+    def last_message(self):
+        row = db.fetchlast(self.table_name, ['*'])
+        message_date = row[0][1]
+        message_body = row[0][2]
+        return message_date, message_body
 
 
-def delete_expense(row_id: int) -> None:
-    """Удаляет сообщение по его идентификатору"""
-    db.delete(table_name, row_id)
+    @staticmethod
+    def _get_now_formatted() -> str:
+        """Возвращает сегодняшнюю дату строкой"""
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def _get_now_formatted() -> str:
-    """Возвращает сегодняшнюю дату строкой"""
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
-print(_get_now_formatted())
+if __name__ == '__main__':
+    manager = DBManager()
+    print(manager.last_message())

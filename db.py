@@ -25,6 +25,12 @@ def fetchall(table: str, columns: List[str]):
     return result
 
 
+def fetchlast(table: str, columns: List[str]):
+    columns_joined = ", ".join(columns)
+    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT 1")
+    result = cursor.fetchall()
+    return result
+
 def delete(table: str, row_id: int) -> None:
     row_id = int(row_id)
     cursor.execute(f"DELETE from {table} where id={row_id}")
@@ -52,18 +58,11 @@ def check_db_exists():
 check_db_exists()
 
 
-# table_name = 'diary'
-# message = {
-#     'created': f'{datetime.now()}',
-#     'message': 'ТЕСТ-ТЕСТ'
-# }
-# insert(table_name, message)
-# rows = fetchall(table_name, ['*'])
-# print(rows)
-#
-#
-# for row in rows:
-#     delete(table_name, row[0])
-#
-#
-# print(fetchall(table_name, ['*']))
+if __name__ == '__main__':
+
+    table_name = 'diary'
+
+    rows = fetchall(table_name, ['*'])
+    print(rows)
+
+    # print(fetchall(table_name, ['*']))
