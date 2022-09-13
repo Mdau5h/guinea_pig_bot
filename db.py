@@ -25,9 +25,9 @@ def fetchall(table: str, columns: List[str]):
     return result
 
 
-def fetchlast(table: str, columns: List[str]):
+def fetch_with_pagination(table: str, columns: List[str], limit: int):
     columns_joined = ", ".join(columns)
-    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT 1")
+    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT {limit}")
     result = cursor.fetchall()
     return result
 

@@ -26,7 +26,7 @@ class DBManager:
         db.delete(self.table_name, row_id)
 
     def get_last_message(self):
-        row = db.fetchlast(self.table_name, ['*'])
+        row = db.fetch_with_pagination(self.table_name, ['*'], 1)
         message_date = row[0][1]
         message_body = row[0][2]
         return message_date, message_body
@@ -37,6 +37,10 @@ class DBManager:
         message_body = row[0][2]
         return message_date, message_body
 
+    def get_message_list(self):
+        rows = db.fetch_with_pagination(self.table_name, ['*'], 5)
+        return [row[:-1] for row in rows]
+
     @staticmethod
     def _get_now_formatted() -> str:
         """Возвращает сегодняшнюю дату строкой"""
@@ -45,4 +49,4 @@ class DBManager:
 
 if __name__ == '__main__':
     manager = DBManager()
-    print(manager.get_last_message())
+    print(manager.get_message_list())

@@ -56,6 +56,17 @@ async def send_last_record(message: types.Message):
     await message.answer(answer, reply_markup=kb)
     await message.delete()
 
+
+@dp.message_handler(commands=['get_some'])
+async def send_record_list(message: types.Message):
+    msg_list = db.get_message_list()
+    answer = '\n'.join([f'{msg[0]}: {msg[1]}' for msg in msg_list])
+    await FSM.msg_list.set()
+    await message.answer(answer, reply_markup=ReplyKeyboardRemove())
+    await message.delete()
+
+
+
 # @dp.message_handler(commands=['get_some'])
 # async def get_record_by_id(message: types.Message):
 #     record_date, record_body = db.get_message_by_id(1)
