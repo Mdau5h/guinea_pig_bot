@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot, storage=MemoryStorage())
-manager = DBManager()
+db = DBManager()
 
 
 @dp.message_handler(commands=['start', 'help'])
@@ -31,8 +31,8 @@ async def send_welcome(message: types.Message):
     await message.delete()
 
 
-@dp.message_handler(commands='new', state=None)
-async def new_message(message: types.Message):
+@dp.message_handler(commands='create_new', state=None)
+async def new_record(message: types.Message):
     answer = "Ну, рассказывай, шо там у тебя"
     await FSM.new_msg.set()
     await message.answer(answer, reply_markup=ReplyKeyboardRemove())
@@ -40,21 +40,24 @@ async def new_message(message: types.Message):
 
 
 @dp.message_handler(state=FSM.new_msg)
-async def load_message(message: types.Message, state: FSMContext):
-    manager.add_message(raw_message=message.text)
+async def load_record(message: types.Message, state: FSMContext):
+    db.add_message(raw_message=message.text)
     answer = "Ну ты ващееее! Ниче, бывает! Я это запомню)"
     await state.finish()
     await message.answer(answer, reply_markup=kb)
 
 
-@dp.message_handler(commands=['last'])
-async def send_message(message: types.Message):
-
-    record_date, record_body = manager.last_message()
+@dp.message_handler(commands=['get_last'])
+async def get_last_record(message: types.Message):
+    record_date, record_body = db.last_message()
     answer = f"Последняя запись от: {record_date}. \n" \
              f"{record_body}"
     await message.answer(answer, reply_markup=kb)
     await message.delete()
+
+@dp.message_handler(commands=['get_some'])
+async def get_records(message: types.Message):
+    
 
 
 if __name__ == '__main__':

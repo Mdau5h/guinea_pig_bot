@@ -1,8 +1,8 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-btn_new = KeyboardButton('/new')
-btn_last = KeyboardButton('/last')
 
-kb = ReplyKeyboardMarkup(resize_keyboard=True)
+btn_new = KeyboardButton('/create_new')
+btn_last = KeyboardButton('/get_last')
+btn_some = KeyboardButton('/get_some')
 
-kb.row(btn_new, btn_last)
+kb = ReplyKeyboardMarkup(resize_keyboard=True).row(btn_new, btn_last)
