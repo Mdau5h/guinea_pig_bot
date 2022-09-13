@@ -25,8 +25,9 @@ async def send_welcome(message: types.Message):
     This handler will be called when user sends `/start` or `/help` command
     """
     welcome_message = "Привет! Это бот-дневник. Он сохранит твои секреты. \n" \
-                      "Запусти команду /new, чтобы сделать запись. \n" \
-                      "Запусти команду /last, чтобы увидеть последнюю запись. \n"
+                      "Запусти команду /create_new, чтобы сделать запись. \n" \
+                      "Запусти команду /get_last, чтобы увидеть последнюю запись. \n" \
+                      "Запусти команду /get_some, чтобы выбрать запись для просмотра. \n"
     await message.answer(welcome_message, reply_markup=kb)
     await message.delete()
 
@@ -48,16 +49,20 @@ async def load_record(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(commands=['get_last'])
-async def get_last_record(message: types.Message):
-    record_date, record_body = db.last_message()
+async def send_last_record(message: types.Message):
+    record_date, record_body = db.get_last_message()
     answer = f"Последняя запись от: {record_date}. \n" \
              f"{record_body}"
     await message.answer(answer, reply_markup=kb)
     await message.delete()
 
-@dp.message_handler(commands=['get_some'])
-async def get_records(message: types.Message):
-    
+# @dp.message_handler(commands=['get_some'])
+# async def get_record_by_id(message: types.Message):
+#     record_date, record_body = db.get_message_by_id(1)
+#     answer = f"Запись с id 1: {record_date}. \n" \
+#              f"{record_body}"
+#     await message.answer(answer, reply_markup=kb)
+#     await message.delete()
 
 
 if __name__ == '__main__':

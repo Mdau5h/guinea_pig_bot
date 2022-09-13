@@ -5,6 +5,7 @@ import db
 
 class FSM(StatesGroup):
     new_msg = State()
+    msg_list = State()
 
 
 class DBManager:
@@ -24,13 +25,17 @@ class DBManager:
         """Удаляет сообщение по его идентификатору"""
         db.delete(self.table_name, row_id)
 
-    # todo
-    def last_message(self):
+    def get_last_message(self):
         row = db.fetchlast(self.table_name, ['*'])
         message_date = row[0][1]
         message_body = row[0][2]
         return message_date, message_body
 
+    def get_message_by_id(self, record_id):
+        row = db.fetch_by_id(self.table_name, ['*'], record_id)
+        message_date = row[0][1]
+        message_body = row[0][2]
+        return message_date, message_body
 
     @staticmethod
     def _get_now_formatted() -> str:
@@ -40,4 +45,4 @@ class DBManager:
 
 if __name__ == '__main__':
     manager = DBManager()
-    print(manager.last_message())
+    print(manager.get_last_message())

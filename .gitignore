@@ -161,3 +161,7 @@ cython_debug/
 .idea/guinea_pig_bot.iml
 .idea/guinea_pig_bot.iml
 .idea/misc.xml
+.idea/misc.xml
+*.xml
+*.xml
+.idea/guinea_pig_bot.iml

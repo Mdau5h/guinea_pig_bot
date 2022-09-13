@@ -31,6 +31,14 @@ def fetchlast(table: str, columns: List[str]):
     result = cursor.fetchall()
     return result
 
+
+def fetch_by_id(table: str, columns: List[str], record_id: int):
+    columns_joined = ", ".join(columns)
+    cursor.execute(f"SELECT {columns_joined} FROM {table} WHERE id = {record_id}")
+    result = cursor.fetchall()
+    return result
+
+
 def delete(table: str, row_id: int) -> None:
     row_id = int(row_id)
     cursor.execute(f"DELETE from {table} where id={row_id}")
@@ -57,12 +65,13 @@ def check_db_exists():
 
 check_db_exists()
 
-
 if __name__ == '__main__':
-
     table_name = 'diary'
 
-    rows = fetchall(table_name, ['*'])
-    print(rows)
+    # rows = fetchall(table_name, ['*'])
+    rows = fetch_by_id(table_name, ['*'], 2)
 
-    # print(fetchall(table_name, ['*']))
+
+
+
+    print(rows)
