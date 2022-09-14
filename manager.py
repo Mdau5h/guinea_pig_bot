@@ -26,20 +26,26 @@ class DBManager:
         db.delete(self.table_name, row_id)
 
     def get_last_message(self):
-        row = db.fetch_with_pagination(self.table_name, ['*'], 1)
-        message_date = row[0][1]
-        message_body = row[0][2]
-        return message_date, message_body
+        """Возвращает последнее записанное сообщение"""
+        return db.fetch_with_pagination(self.table_name, ['created', 'message'], 1)[0]
 
+    # todo отрефакторить как get_last_message
     def get_message_by_id(self, record_id):
+        """Возвращает сообщение по его идентификатору"""
         row = db.fetch_by_id(self.table_name, ['*'], record_id)
         message_date = row[0][1]
         message_body = row[0][2]
         return message_date, message_body
 
     def get_message_list(self):
-        rows = db.fetch_with_pagination(self.table_name, ['*'], 5)
-        return [row[:-1] for row in rows]
+        """Возвращает список сообщений"""
+        return db.fetch_with_pagination(self.table_name, ['id', 'created'], 5)
+
+    # todo Переделать в db.py под нормальный запрос
+    def get_messages_count(self):
+        """Возвращает количество записей"""
+        rows = db.fetchall(self.table_name, ['*'])
+        return len(rows)
 
     @staticmethod
     def _get_now_formatted() -> str:
@@ -49,4 +55,4 @@ class DBManager:
 
 if __name__ == '__main__':
     manager = DBManager()
-    print(manager.get_message_list())
+    print(manager.get_last_message())

@@ -25,9 +25,9 @@ def fetchall(table: str, columns: List[str]):
     return result
 
 
-def fetch_with_pagination(table: str, columns: List[str], limit: int):
+def fetch_with_pagination(table: str, columns: List[str], limit: int, offset: int = 0):
     columns_joined = ", ".join(columns)
-    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT {limit}")
+    cursor.execute(f"SELECT {columns_joined} FROM {table} ORDER BY id DESC LIMIT {limit} OFFSET {offset}")
     result = cursor.fetchall()
     return result
 
@@ -69,8 +69,8 @@ if __name__ == '__main__':
     table_name = 'diary'
 
     # rows = fetchall(table_name, ['*'])
-    rows = fetch_by_id(table_name, ['*'], 2)
-
+    # rows = fetch_by_id(table_name, ['*'], 2)
+    rows = fetch_with_pagination(table_name, ['*'], 6, 1)
 
 
 
